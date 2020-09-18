@@ -12,11 +12,38 @@ describe("The getBodyFromRequest function", () => {
     //Arrange
     const bodyPromise = getBodyFromRequest(fakeReq)
     //Act
-    
+    fakeReq.emit('end');
     //Assert
+    bodyPromise
+      .then(body => {
+        if(body === '') {
+          done();
+        } else {
+          done(`Failed. Got "${body}"`)
+        }
+      })
   });
 
   it('returns the data read from the stream', done => {
-    expect.fail('please write this test');
+    //Arrage
+    const bodyPromise = getBodyFromRequest(fakeReq)
+    const data1 = 'First set of data'
+    const data2 = 'Second set of data'
+    
+    //Act
+    fakeReq.emit("data", data1);
+    fakeReq.emit("data", data2);
+    fakeReq.emit("end");
+    // Assert
+    bodyPromise
+      .then(body => {
+        if(body === data1 + data2) {
+          done()
+        } else {
+         done(`Failed. Got "${body}"`);
+    }
+    console.log(data1);
+    console.log(data2);
+      })
   });
 });
