@@ -4,13 +4,14 @@ const { mergeCategories } = require("../merge-categories");
 describe("mergeCategories()", () => {
 	context("Using <li> tags", () => {
 		const template = `
-      <div>
-        <ul>
-          <!-- Content here -->
-        </ul>
-      </div>
-    `;
-
+				<div>
+					<ul>
+						{{#each categories}}
+							<li>{{ this }}</li>
+						{{/each}}
+					</ul>
+				</div>
+			`;
 		it("should return no <li>s for no categories", () => {
 			//Arrange
 			const categories = [];
@@ -58,20 +59,21 @@ describe("mergeCategories()", () => {
 
 	context("using <option> tags", () => {
 		const template = `
-      <div>
-        <select>
-          <!-- Content here -->
-        </select>
-      </div>
-    `;
-
+			<div>
+				<select>
+					{{#each categories}}
+						<option>{{ this }}</option>
+					{{/each}}
+				</select>
+			</div>
+		`;
 		it("should return no <option>s for no categories", () => {
 			//arrage
-			const categories = []
+			const categories = [];
 			//act
-			const result = mergeCategories(template, categories, 'option')
+			const result = mergeCategories(template, categories, "option");
 			//assert
-			expect(result).to.contain('<div>')
+			expect(result).to.contain("<div>");
 			expect(result).to.contain("</div>");
 			expect(result).to.contain("<select>");
 			expect(result).to.contain("</select>");
@@ -81,25 +83,22 @@ describe("mergeCategories()", () => {
 		});
 
 		it("should return a single <option> for one category", () => {
-			const categories = ['string']
+			const categories = ["string"];
 
 			const result = mergeCategories(template, categories, "option");
 
 			expect(result).to.contain("<div>");
-      		expect(result).to.contain("</div>");
-      		expect(result).to.contain("<select>");
+			expect(result).to.contain("</div>");
+			expect(result).to.contain("<select>");
 			expect(result).to.contain("</select>");
 			expect(result).to.contain("<option>string</option>");
 			expect(result).to.not.contain("<!-- Content here -->");
-
-
-
 		});
 
 		it("should return an <option> for each category", () => {
-			const categories = ["string", 'puppies'];
+			const categories = ["string", "puppies"];
 
-      		const result = mergeCategories(template, categories, "option");
+			const result = mergeCategories(template, categories, "option");
 
 			expect(result).to.contain("<div>");
 			expect(result).to.contain("</div>");
@@ -108,7 +107,6 @@ describe("mergeCategories()", () => {
 			expect(result).to.contain("<option>string</option>");
 			expect(result).to.contain("<option>puppies</option>");
 			expect(result).to.not.contain("<!-- Content here -->");
-
 		});
 	});
 });
